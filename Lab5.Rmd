@@ -1,0 +1,10 @@
+---
+title: "R Notebook"
+authors: "Tori Hancheck and Sam Colucci"
+output: html_notebook
+---
+
+# Problem 0
+https://github.com/sam-colucci/ma350-lab5
+
+# Problem 1
