@@ -8,3 +8,54 @@ output: html_notebook
 https://github.com/sam-colucci/ma350-lab5
 
 # Problem 1
+```{r}
+x <- c(2.2, 7.8, -4.4, 0.0, -1.2, 3.9, 4.9, -5.7, -7.9, -4.9, 28.7, 4.9)
+quantile(x)
+IQR <- 4.900+4.525
+```
+The first quartile is -4.525 and the third quartile is 4.900. The interquartile range is 9.425.
+
+# Problem 2
+```{r}
+quartiles <- function (v) {
+  y <- vector()
+  y[1] <- quantile(v)[2]
+  y[2] <- quantile(v)[4]
+  y[3] <- y[2] - y[1]
+  return(y)
+}
+quartiles(x)
+```
+
+# Problem 3
+```{r}
+quartiles(x)[1] - 1.5*IQR
+quartiles(x)[2] + 1.5*IQR
+```
+The only outlier in x is 28.7 according to Turkey's rule.
+
+#Problem 4
+```{r}
+turkey.outlier <- function(v) {
+  z <- vector()
+  for (i in 1:length(v)){
+  if ((v[i] < (quartiles(v)[1] - 1.5*(quartiles(v)[2]-quartiles(v)[1]))) || (v[i] > (quartiles(v)[2] + 1.5*(quartiles(v)[2]-quartiles(v)[1])))) {
+    z[i] <- TRUE
+  }
+    else {
+      z[i] <- FALSE
+    }
+  }
+  return(z)
+}
+turkey.outlier(x)
+```
+
+# Problem 5
+```{r}
+test.turkey.outlier<- function(fun = turkey.outlier) {
+  t <- -18.6625
+  T <- 19.0375
+}
+```
+
