@@ -96,15 +96,204 @@ For **x**, the function gives the correct output.
 #' @return TRUE if the function correctly identifies the outliers
 #' and FALSE otherwise
 
-test.tukey.outlier <- function(fun = tukey.outlier)
- 
+test.tukey.outlier <- function(fun = tukey.outlier) {
+  x <<- c(2.2, 7.8, -4.4, 0.0, -1.2, 3.9, 4.9, -5.7, -7.9, -4.9, 28.7, 4.9)
+  
+  Q1 <- quantile(x)[[2]] # Calculate first quartile of x
+  
+  Q3 <- quantile(x)[[4]] # Calculate third quantile of x
+  
+  IQR <- Q3 - Q1 # Calculate interquartile range of x
+  
+  check.values <- vector() # Create vector check.values
+  
+  for (i in 1:length(x)) {
+    if ((fun(x)[i] == TRUE) && (x[i] < (Q1-1.5*IQR)) || (x[i] > Q3+1.5*IQR)) {
+      check.values[i] <- TRUE
+    }else {
+      check.values[i] <- FALSE
+    }
+    if (check.values[i] == fun(x)[i]) {
+      return(TRUE)
+    }
+  }
+
+}
+test.tukey.outlier() # Run function 
+```
+**Test.tukey.outlier** gives the correct answer when passed **tukey.outlier**.
+
+# Problem 6
+
+```{r}
+tukey.outlier(-x) # Run function with -x
+
+quartiles(-x)[[1]] - 1.5*quartiles(-x)[[3]] # Calculate lower boundary for Tukey
+quartiles(-x)[[2]] + 1.5*quartiles(-x)[[3]] # Calculate upper boundary for Tukey
+```
+In **-x**, the 11th element (-28.7) should be an outlier. This is the same position of the outlier for **x**. Also, the outlier for **-x** is the same as the outlier for **x**- just with the opposite sign.
+
+# Problem 7
+
+```{r}
+#' Modifies test.tukey.outlier to inclue -x as an additional test
+#' case
+#'
+#' @param fun a function to compute outliers, with tukey.outlier
+#' as its default value
+#' @return Boolean vector with two elements, one for each of the two
+#' test, TRUE if the function correctly identifies the outliers
+#' and FALSE otherwise
+
+test.tukey.outlier <- function(fun = tukey.outlier) {
+  x <<- c(2.2, 7.8, -4.4, 0.0, -1.2, 3.9, 4.9, -5.7, -7.9, -4.9, 28.7, 4.9)
+  
+  Q1 <- quantile(x)[[2]] # Calculate first quartile of x
+  
+  Q3 <- quantile(x)[[4]] # Calculate third quantile of x
+  
+  IQR <- Q3 - Q1 # Calculate interquartile range of x
+  
+  check.values <- vector() # Create vector check.values
+  
+  correct.answer <- vector() # Create vector correct.answer
+  
+  neg.Q1 <- quantile(-x)[[2]] # Calculate first quartile of -x
+    
+  neg.Q3 <- quantile(-x)[[4]] # Calculate third quantile of -x
+    
+  neg.IQR <- neg.Q3 - neg.Q1 # Calculate interquartile range of -x
+  
+  check2 <- vector() # Create vector check2
+  
+  for (i in 1:length(x)) {
+    if ((fun(x)[i] == TRUE) && (x[i] < (Q1-1.5*IQR)) || (x[i] > Q3+1.5*IQR)) {
+      check.values[i] <- TRUE
+    }else {
+      check.values[i] <- FALSE
+    }
+    if (check.values[i] == fun(x)[i]) {
+      correct.answer[1] <- TRUE
+    }else {
+      correct.answer[1] <- FALSE
+    }
+    if ((fun(-x)[i] == TRUE) && (-x[i] < (neg.Q1-1.5*neg.IQR)) || (-x[i] > neg.Q3+1.5*neg.IQR)) {
+      check2[i] <- TRUE
+    }else {
+      check2[i] <- FALSE
+    }
+    if (check2[i] == fun(-x)[i]) {
+      correct.answer[2] <- TRUE
+    }else {
+      correct.answer[2] <- FALSE
+    }
+  }
+return(correct.answer)
+}
 ```
 
+# Problem 8
 
+```{r}
+test.tukey.outlier() # Run modified test.tukey.outlier
+```
+Tukey.outlier passes the new set of tests.
 
+# Problem 9
 
+```{r}
+tukey.outlier(0.1*x) # Run function with -x
 
+quartiles(0.1*x)[[1]] - 1.5*quartiles(0.1*x)[[3]] # Calculate lower boundary for Tukey
+quartiles(0.1*x)[[2]] + 1.5*quartiles(0.1*x)[[3]] # Calculate upper boundary for Tukey
 
+0.1*x
+```
+Same as before, the 11th element should be an outlier. In this case, the 11th elements is 2.87.
+
+# Problem 10
+
+```{r}
+#' Modifies test.tukey.outlier to inclue -x as an additional test
+#' case
+#'
+#' @param fun a function to compute outliers, with tukey.outlier
+#' as its default value
+#' @return Boolean vector with two elements, one for each of the two
+#' test, TRUE if the function correctly identifies the outliers
+#' and FALSE otherwise
+
+test.tukey.outlier <- function(fun = tukey.outlier) {
+  x <<- c(2.2, 7.8, -4.4, 0.0, -1.2, 3.9, 4.9, -5.7, -7.9, -4.9, 28.7, 4.9)
+  
+  Q1 <- quantile(x)[[2]] # Calculate first quartile of x
+  
+  Q3 <- quantile(x)[[4]] # Calculate third quantile of x
+  
+  IQR <- Q3 - Q1 # Calculate interquartile range of x
+  
+  check.values <- vector() # Create vector check.values
+  
+  correct.answer <- vector() # Create vector correct.answer
+  
+  neg.Q1 <- quantile(-x)[[2]] # Calculate first quartile of -x
+    
+  neg.Q3 <- quantile(-x)[[4]] # Calculate third quantile of -x
+    
+  neg.IQR <- neg.Q3 - neg.Q1 # Calculate interquartile range of -x
+  
+  check2 <- vector() # Create vector check2
+  
+  Q1.01 <- quantile(0.1*x)[[2]] # Calculate first quartile of 0.1x
+  
+  Q3.01 <- quantile(0.1*x)[[4]] # Calculate third quartile of 0.1x
+  
+  IQR.01 <- Q3.01 - Q1.01 # Calculate interquartile range of 0.1x
+  
+  check3 <- vector() # Create vector check3
+  
+  for (i in 1:length(x)) {
+    if ((fun(x)[i] == TRUE) && (x[i] < (Q1-1.5*IQR)) || (x[i] > Q3+1.5*IQR)) {
+      check.values[i] <- TRUE
+    }else {
+      check.values[i] <- FALSE
+    }
+    if (check.values[i] == fun(x)[i]) {
+      correct.answer[1] <- TRUE
+    }else {
+      correct.answer[1] <- FALSE
+    }
+    if ((fun(-x)[i] == TRUE) && (-x[i] < (neg.Q1-1.5*neg.IQR)) || (-x[i] > neg.Q3+1.5*neg.IQR)) {
+      check2[i] <- TRUE
+    }else {
+      check2[i] <- FALSE
+    }
+    if (check2[i] == fun(-x)[i]) {
+      correct.answer[2] <- TRUE
+    }else {
+      correct.answer[2] <- FALSE
+    }
+    if ((fun(0.1*x)[i] == TRUE) && (0.1*x[i] < (Q1.01-1.5*IQR.01)) || (0.1*x[i] > Q3.01+1.5*IQR.01)) {
+      check3[i] <- TRUE
+    }else {
+      check3[i] <- FALSE
+    }
+    if (check3[i] == fun(0.1*x)[i]) {
+      correct.answer[3] <- TRUE
+    }else {
+      correct.answer[3] <- FALSE
+    }
+  }
+return(correct.answer)
+}
+```
+
+# Problem 11
+
+```{r}
+test.tukey.outlier() # Return modified test.tukey.outlier
+```
+**tukey.outlier** passes the new set of tests. 
 
 
 
