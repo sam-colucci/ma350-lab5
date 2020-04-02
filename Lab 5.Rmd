@@ -1,7 +1,0 @@
----
-title: "Lab 5"
-
-output: html_document
----
-
-Hello
